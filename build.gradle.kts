@@ -31,6 +31,15 @@ android {
     defaultConfig {
         buildConfigField("String", "SDK_VERSION", "\"${project.version}\"")
     }
+
+    // Expose a `release` software component for maven-publish. Without
+    // singleVariant(), `from(components["release"])` below has nothing to
+    // resolve and the publish task fails.
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
