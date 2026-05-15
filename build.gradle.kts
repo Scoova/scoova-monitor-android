@@ -60,7 +60,7 @@ afterEvaluate {
                 pom {
                     name.set("Scoova Monitor Android SDK")
                     description.set("Crash reporting, analytics, performance monitoring, and AI-powered fix suggestions for Android apps.")
-                    url.set("https://github.com/zaidzedoo007/scoova-monitor")
+                    url.set("https://github.com/Scoova/scoova-monitor-android")
 
                     licenses {
                         license {
@@ -79,9 +79,9 @@ afterEvaluate {
                     }
 
                     scm {
-                        connection.set("scm:git:git://github.com/zaidzedoo007/scoova-monitor.git")
-                        developerConnection.set("scm:git:ssh://github.com:zaidzedoo007/scoova-monitor.git")
-                        url.set("https://github.com/zaidzedoo007/scoova-monitor")
+                        connection.set("scm:git:git://github.com/Scoova/scoova-monitor-android.git")
+                        developerConnection.set("scm:git:ssh://github.com:Scoova/scoova-monitor-android.git")
+                        url.set("https://github.com/Scoova/scoova-monitor-android")
                     }
                 }
             }
@@ -91,7 +91,7 @@ afterEvaluate {
             // GitHub Packages (works immediately)
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/zaidzedoo007/scoova-monitor")
+                url = uri("https://maven.pkg.github.com/Scoova/scoova-monitor-android")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as? String ?: ""
                     password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as? String ?: ""
