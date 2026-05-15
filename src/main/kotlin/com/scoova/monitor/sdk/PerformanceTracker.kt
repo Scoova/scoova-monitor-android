@@ -19,12 +19,11 @@ internal class PerformanceTracker(private val batcher: EventBatcher) {
      *    work that happened before init) but the best we can do without
      *    an Android Jetpack startup probe.
      *
-     * Previous version captured SystemClock.elapsedRealtime() in this
-     * field and subtracted it inside trackAppStart() — but trackAppStart
-     * is called immediately after the field initializer, so the delta
-     * was always 1-2 ms (just SDK init time, not real cold start). On
-     * Device Farm we saw cold_start = 1-2 ms which is impossible; that
-     * was the bug.
+     * Note: this field must hold the process start time, not the SDK
+     * init time. Capturing a clock value in the field initializer and
+     * subtracting it inside trackAppStart() would only measure SDK init
+     * (a millisecond or two) — not the real tap-to-first-frame cold
+     * start. Process.getStartUptimeMillis() is the correct anchor.
      */
     private val processStartUptime: Long = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Process.getStartUptimeMillis()

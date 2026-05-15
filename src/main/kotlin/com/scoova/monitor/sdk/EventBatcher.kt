@@ -70,11 +70,10 @@ internal class EventBatcher(
     private val apiKey: String,
     private val endpoint: String,
     private val maxBatchSize: Int = 50,
-    // 30s default — was 5 min, which meant short user sessions and
-    // Device Farm runs could end with events still queued in memory.
-    // Also matters for the anon→real merge: identify needs the anon
-    // row to exist before it runs, so events must reach the server
-    // promptly.
+    // 30s default — short enough that brief user sessions don't end with
+    // events still queued in memory. Also matters for the anon→real
+    // merge: identify needs the anon row to exist before it runs, so
+    // events must reach the server promptly.
     flushIntervalMs: Long = 30_000
 ) {
     // Disk-backed queues — survive app kills
