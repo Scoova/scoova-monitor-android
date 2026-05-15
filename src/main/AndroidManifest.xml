@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- No permissions declared. SDK uses only what the host app already has.
+         If the app has INTERNET → events get sent.
+         If the app has ACCESS_NETWORK_STATE → network type is collected.
+         If neither → SDK gracefully skips those features. -->
+</manifest>
