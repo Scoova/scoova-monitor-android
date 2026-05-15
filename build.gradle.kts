@@ -29,7 +29,10 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "SDK_VERSION", "\"${project.version}\"")
+        // Strip any leading "v" — JitPack passes the git tag as -Pversion,
+        // and the tag is "v1.4.0", but telemetry should report "1.4.0".
+        buildConfigField("String", "SDK_VERSION",
+            "\"${project.version.toString().removePrefix("v")}\"")
     }
 
     // Expose a `release` software component for maven-publish. Without

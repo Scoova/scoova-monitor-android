@@ -18,7 +18,7 @@ repositories {
 
 // module build.gradle.kts
 dependencies {
-    implementation("com.github.Scoova:scoova-monitor-android:1.4.0")
+    implementation("com.github.Scoova:scoova-monitor-android:v1.4.0")
 }
 ```
 
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Scoova:scoova-monitor-android:1.4.0'
+    implementation 'com.github.Scoova:scoova-monitor-android:v1.4.0'
 }
 ```
 
