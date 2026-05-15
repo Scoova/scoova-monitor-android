@@ -5,23 +5,36 @@ detection, and battery monitoring. API 21+ (Android 5.0 Lollipop).
 
 ## Install
 
+The SDK is distributed through [JitPack](https://jitpack.io) — add the
+`jitpack.io` repository, then the dependency.
+
 ### Gradle (Kotlin DSL)
 
 ```kotlin
+// settings.gradle.kts → dependencyResolutionManagement { repositories { … } }
+repositories {
+    maven { url = uri("https://jitpack.io") }
+}
+
+// module build.gradle.kts
 dependencies {
-    implementation("com.scoova.monitor:sdk-android:1.4.0")
+    implementation("com.github.Scoova:scoova-monitor-android:1.4.0")
 }
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
 dependencies {
-    implementation 'com.scoova.monitor:sdk-android:1.4.0'
+    implementation 'com.github.Scoova:scoova-monitor-android:1.4.0'
 }
 ```
 
-The SDK uses Maven Central — no extra repository setup is needed.
+No credentials are required to resolve the dependency.
 
 ## Usage
 
@@ -129,8 +142,8 @@ ScoovaMonitor.clearLocalUserData()
 ```
 
 Wipes queued events, the pending crash file, breadcrumbs, the anonymous
-installation ID, the session counter, and any cached location. Pair with a
-server-side `DELETE /v1/ingest/me/{userId}`.
+installation ID, and the session counter. Pair with a server-side
+`DELETE /v1/ingest/me/{userId}`.
 
 ### Manual flush
 
@@ -157,10 +170,12 @@ event leaves the device.
 ## Symbolication
 
 Upload your ProGuard / R8 mapping file so server-side stack traces are
-de-obfuscated:
+de-obfuscated. The upload script ships in this repository at
+[`scripts/scoova-upload-mapping.js`](scripts/scoova-upload-mapping.js) —
+run it with Node:
 
 ```bash
-node sdk-android/scripts/scoova-upload-mapping.js \
+node scoova-upload-mapping.js \
     --api-key sm_your_api_key \
     --version 1.0.0 \
     --mapping app/build/outputs/mapping/release/mapping.txt
@@ -172,7 +187,6 @@ Wire this into your release build via a Gradle task — see
 ## Building from source
 
 ```bash
-cd sdk-android
 gradle build
 ```
 
