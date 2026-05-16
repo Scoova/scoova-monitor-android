@@ -5,36 +5,24 @@ detection, and battery monitoring. API 21+ (Android 5.0 Lollipop).
 
 ## Install
 
-The SDK is distributed through [JitPack](https://jitpack.io) — add the
-`jitpack.io` repository, then the dependency.
+The SDK is on **Maven Central** — no extra repository setup (`mavenCentral()`
+is already in virtually every Android project).
 
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-// settings.gradle.kts → dependencyResolutionManagement { repositories { … } }
-repositories {
-    maven { url = uri("https://jitpack.io") }
-}
-
-// module build.gradle.kts
 dependencies {
-    implementation("com.github.Scoova:scoova-monitor-android:v1.4.0")
+    implementation("info.scoo-va:scoova-monitor-android:1.4.0")
 }
 ```
 
 ### Gradle (Groovy)
 
 ```groovy
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
-    implementation 'com.github.Scoova:scoova-monitor-android:v1.4.0'
+    implementation 'info.scoo-va:scoova-monitor-android:1.4.0'
 }
 ```
-
-No credentials are required to resolve the dependency.
 
 ## Usage
 
