@@ -29,7 +29,20 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "SDK_VERSION", "\"${project.version}\"")
+        // Strip any leading "v" — JitPack passes the git tag as -Pversion,
+        // and the tag is "v1.4.0", but telemetry should report "1.4.0".
+        buildConfigField("String", "SDK_VERSION",
+            "\"${project.version.toString().removePrefix("v")}\"")
+    }
+
+    // Expose a `release` software component for maven-publish. Without
+    // singleVariant(), `from(components["release"])` below has nothing to
+    // resolve and the publish task fails.
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -44,7 +57,10 @@ dependencies {
 }
 
 // ─── Publishing ───
-group = "com.scoova.monitor"
+// Maven Central coordinate: info.scoo-va:scoova-monitor-android
+// (groupId is the verified scoo-va.info namespace). JitPack overrides
+// the group via -Pgroup at build time, so it is unaffected.
+group = "info.scoo-va"
 version = "1.5.0"
 
 afterEvaluate {
@@ -53,14 +69,14 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
 
-                groupId = "com.scoova.monitor"
-                artifactId = "sdk"
+                groupId = "info.scoo-va"
+                artifactId = "scoova-monitor-android"
                 version = project.version.toString()
 
                 pom {
                     name.set("Scoova Monitor Android SDK")
-                    description.set("Crash reporting, analytics, performance monitoring, and AI-powered fix suggestions for Android apps.")
-                    url.set("https://github.com/zaidzedoo007/scoova-monitor")
+                    description.set("Crash reporting, analytics, performance monitoring, ANR detection, and logging for Android apps.")
+                    url.set("https://github.com/Scoova/scoova-monitor-android")
 
                     licenses {
                         license {
@@ -79,42 +95,35 @@ afterEvaluate {
                     }
 
                     scm {
-                        connection.set("scm:git:git://github.com/zaidzedoo007/scoova-monitor.git")
-                        developerConnection.set("scm:git:ssh://github.com:zaidzedoo007/scoova-monitor.git")
-                        url.set("https://github.com/zaidzedoo007/scoova-monitor")
+                        connection.set("scm:git:git://github.com/Scoova/scoova-monitor-android.git")
+                        developerConnection.set("scm:git:ssh://github.com:Scoova/scoova-monitor-android.git")
+                        url.set("https://github.com/Scoova/scoova-monitor-android")
                     }
                 }
             }
         }
 
         repositories {
-            // GitHub Packages (works immediately)
+            // Local staging dir. `publishReleasePublicationToLocalStagingRepository`
+            // writes the full signed Maven layout here; it is then zipped into a
+            // bundle and uploaded to the Maven Central Portal.
             maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/zaidzedoo007/scoova-monitor")
-                credentials {
-                    username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as? String ?: ""
-                    password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as? String ?: ""
-                }
-            }
-
-            // Maven Central (when Sonatype account is ready)
-            maven {
-                name = "MavenCentral"
-                val releasesUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-                val snapshotsUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl
-                credentials {
-                    username = System.getenv("OSSRH_USERNAME") ?: project.findProperty("ossrh.username") as? String ?: ""
-                    password = System.getenv("OSSRH_PASSWORD") ?: project.findProperty("ossrh.password") as? String ?: ""
-                }
+                name = "LocalStaging"
+                url = uri(layout.buildDirectory.dir("staging-repo"))
             }
         }
     }
 
-    // GPG signing (required for Maven Central)
+    // GPG signing — required by Maven Central. The key is supplied via
+    // env (SIGNING_KEY = ASCII-armored private key, SIGNING_PASSWORD).
+    // When absent — e.g. a JitPack build — signing is skipped.
     signing {
-        isRequired = gradle.taskGraph.hasTask("publishReleasePublicationToMavenCentralRepository")
+        val signingKey: String? = System.getenv("SIGNING_KEY")
+        val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+        isRequired = signingKey != null
+        if (signingKey != null) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        }
         sign(publishing.publications["release"])
     }
 }
