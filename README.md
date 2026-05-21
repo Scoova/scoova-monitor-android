@@ -12,7 +12,7 @@ is already in virtually every Android project).
 
 ```kotlin
 dependencies {
-    implementation("info.scoo-va:scoova-monitor-android:1.4.0")
+    implementation("info.scoo-va:scoova-monitor-android:1.5.0")
 }
 ```
 
@@ -20,7 +20,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'info.scoo-va:scoova-monitor-android:1.4.0'
+    implementation 'info.scoo-va:scoova-monitor-android:1.5.0'
 }
 ```
 
@@ -70,7 +70,7 @@ Sentry, Mixpanel, Stripe, Google Maps, Retrofit, OkHttp, etc.) and emits a
 single `detected_sdks` event. Useful for the SDK-adoption dashboard, never
 required for crash/analytics/perf.
 
-See [the documentation](https://monitor.scoo-va.info/docs)
+See [the SDK documentation](../docs/)
 for the full collection inventory.
 
 ## API
@@ -170,7 +170,7 @@ node scoova-upload-mapping.js \
 ```
 
 Wire this into your release build via a Gradle task — see
-[the documentation](https://monitor.scoo-va.info/docs) for the full setup.
+[the SDK documentation](../docs/) for the full setup.
 
 ## Building from source
 
@@ -182,4 +182,4 @@ gradle build
 
 ## License
 
-[Apache 2.0](LICENSE).
+[Apache 2.0](../LICENSE).

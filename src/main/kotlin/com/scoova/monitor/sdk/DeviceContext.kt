@@ -48,7 +48,7 @@ data class DeviceInfo(
     val sdkVersion: String? = null,
 )
 
-internal const val SDK_VERSION = "1.4.0"
+internal const val SDK_VERSION = "1.5.0"
 
 internal object DeviceContext {
     var userId: String? = null
